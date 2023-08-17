@@ -37,8 +37,8 @@ case "$ZIPFILE" in
     *ksu*)
     ui_print " ";
     ui_print " ===================================  ";
-    ui_print " |            MENGGUNAKAN           | ";
-    ui_print " |             KSU MODE             | ";
+    ui_print " |          ANDA MENGGUNAKAN       | ";
+    ui_print " |              KSU MODE           | ";
     ui_print " ===================================  ";
     ui_print " ";
     ui_print " ";
@@ -83,4 +83,3 @@ reset_ak;
 
 #flash_boot;
 ## end vendor_boot install
-
