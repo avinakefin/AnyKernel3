@@ -4,27 +4,23 @@
 ## AnyKernel setup
 # begin properties
 properties() { '
-kernel.string=Sudah backup BOOT dan DTBO ?
+kernel.string=Sudah Backup Boot and DTBO
 do.devicecheck=1
 do.modules=0
 do.systemless=1
 do.cleanup=1
 do.cleanuponabort=0
-device.name1=marble
-device.name2=marblein
-device.name3=
-device.name4=
-device.name5=
-supported.versions=
+device.name1=alioth
+device.name2=aliothin
+supported.versions=11 - 13
+supported.patchlevels=
 '; } # end properties
 
 # shell variables
-slot=$(find_slot);
-block=/dev/block/bootdevice/by-name/boot$slot;
+block=/dev/block/bootdevice/by-name/boot;
 is_slot_device=1;
 ramdisk_compression=auto;
 patch_vbmeta_flag=auto;
-
 
 ## AnyKernel methods (DO NOT CHANGE)
 # import patching functions/variables - see for reference
@@ -35,19 +31,48 @@ patch_vbmeta_flag=auto;
 set_perm_recursive 0 0 755 644 $ramdisk/*;
 set_perm_recursive 0 0 750 750 $ramdisk/init* $ramdisk/sbin;
 
-## AnyKernel install
+case "$ZIPFILE" in
+    *ksu*)
+    ui_print " ";
+    ui_print " ";
+    ui_print " ================================== ";
+    ui_print " |    Anda Menggunakan Mode KSU   | ";
+    ui_print " |      Rootless use KernelSU     | ";
+    ui_print " ================================== ";
+    ui_print " ";
+    ui_print " ";
+    rm Image;
+    mv ksu/Image $home/Image;
+    ;;
+    *)
+    ui_print " ";
+    ui_print " ";
+    ui_print " Tanpa Menggunakan Mode KSU ";
+    ui_print " ";
+    ;;
+esac
+    
+## AnyKernel boot install
 dump_boot;
 flash_dtbo;
 
-## Selinux Permissive
-#patch_cmdline androidboot.selinux androidboot.selinux=permissive
-
-# migrate from /overlay to /overlay.d to enable SAR Magisk
-if [ -d $ramdisk/overlay ]; then
-  rm -rf $ramdisk/overlay;
-fi;
-
+# begin ramdisk changes
 # end ramdisk changes
 
 write_boot;
-## end install
+## end boot install
+
+# shell variables
+block=vendor_boot;
+is_slot_device=1;
+ramdisk_compression=auto;
+patch_vbmeta_flag=auto;
+
+# reset for vendor_boot patching
+reset_ak;
+
+## AnyKernel vendor_boot install
+#split_boot; # skip unpack/repack ramdisk since we don't need vendor_ramdisk access
+
+#flash_boot;
+## end vendor_boot install
