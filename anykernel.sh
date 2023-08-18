@@ -25,7 +25,28 @@ ramdisk_compression=auto
 patch_vbmeta_flag=auto
 
 # import functions/variables and setup patching - see for reference (DO NOT REMOVE)
-. tools/ak3-core.sh
+# Use choice for use KSU or No
+tools/ak3-core.sh
+case "$ZIPFILE" in
+    *ksu*)
+    ui_print " ";
+    ui_print " ";
+    ui_print " ================================== ";
+    ui_print " |    Anda Menggunakan Mode KSU   | ";
+    ui_print " |      Rootless use KernelSU     | ";
+    ui_print " ================================== ";
+    ui_print " ";
+    ui_print " ";
+    rm Image;
+    mv ksu/Image $home/Image;
+    ;;
+    *)
+    ui_print " ";
+    ui_print " ";
+    ui_print " Tanpa Menggunakan Mode KSU ";
+    ui_print " ";
+    ;;
+esac
 
 dump_boot # use split_boot to skip ramdisk unpack, e.g. for devices with init_boot ramdisk
 
