@@ -30,27 +30,6 @@ patch_vbmeta_flag=auto;
 # set permissions/ownership for included ramdisk files
 set_perm_recursive 0 0 755 644 $ramdisk/*;
 set_perm_recursive 0 0 750 750 $ramdisk/init* $ramdisk/sbin;
-
-case "$ZIPFILE" in
-    *ksu*)
-    ui_print " ";
-    ui_print " ";
-    ui_print " ================================== ";
-    ui_print " |    Anda Menggunakan Mode KSU   | ";
-    ui_print " |      Rootless use KernelSU     | ";
-    ui_print " ================================== ";
-    ui_print " ";
-    ui_print " ";
-    rm Image;
-    mv ksu/Image $home/Image;
-    ;;
-    *)
-    ui_print " ";
-    ui_print " ";
-    ui_print " Tanpa Menggunakan Mode KSU ";
-    ui_print " ";
-    ;;
-esac
     
 ## AnyKernel boot install
 dump_boot;
