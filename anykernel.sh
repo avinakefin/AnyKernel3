@@ -12,7 +12,7 @@ do.cleanup=1
 do.cleanuponabort=0
 device.name1=alioth
 device.name2=aliothin
-supported.versions=11 - 13
+supported.versions=
 supported.patchlevels=
 '; } # end properties
 
