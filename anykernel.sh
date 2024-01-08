@@ -12,7 +12,7 @@ do.cleanup=1
 do.cleanuponabort=0
 device.name1=alioth
 device.name2=aliothin
-supported.versions=
+supported.versions=11 - 14
 supported.patchlevels=
 '; } # end properties
 
@@ -22,15 +22,36 @@ is_slot_device=1;
 ramdisk_compression=auto;
 patch_vbmeta_flag=auto;
 
+
 ## AnyKernel methods (DO NOT CHANGE)
 # import patching functions/variables - see for reference
 . tools/ak3-core.sh;
+
 
 ## AnyKernel file attributes
 # set permissions/ownership for included ramdisk files
 set_perm_recursive 0 0 755 644 $ramdisk/*;
 set_perm_recursive 0 0 750 750 $ramdisk/init* $ramdisk/sbin;
-    
+
+case "$ZIPFILE" in
+    *miui*)
+    ui_print " ==============================";
+    ui_print "    Stock Based Rom detected ";
+    ui_print " ";
+    ui_print "    Auto Removed dtb and dtbo ";
+    ui_print " ==============================";
+    rm dtb;
+    rm dtbo.img;
+    ;;
+    *)
+    ui_print " ==============================";
+    ui_print " ";
+    ui_print "    AOSP Based rom detected  ";
+    ui_print " ";
+    ui_print " ==============================";
+    ;;
+esac
+
 ## AnyKernel boot install
 dump_boot;
 flash_dtbo;
@@ -41,6 +62,7 @@ flash_dtbo;
 write_boot;
 ## end boot install
 
+
 # shell variables
 block=vendor_boot;
 is_slot_device=1;
@@ -48,7 +70,9 @@ ramdisk_compression=auto;
 patch_vbmeta_flag=auto;
 
 # reset for vendor_boot patching
+ui_print " reset vendor ";
 reset_ak;
+
 
 ## AnyKernel vendor_boot install
 #split_boot; # skip unpack/repack ramdisk since we don't need vendor_ramdisk access
